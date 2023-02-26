@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 namespace AFPC {
 
@@ -12,6 +13,7 @@ namespace AFPC {
         public bool isDebugLog;
 
         public string ID = "AFPC";
+        public TextMeshProUGUI Instructions;
         private bool isAvailable = true;
 
         [Header("Health")]
@@ -144,7 +146,7 @@ namespace AFPC {
         /// </summary>
         public virtual void BanShieldRecovery () {
             isShieldRecovery = false;
-            if (isDebugLog) Debug.Log (ID + ": Ban Shiled Recovery.");
+            if (isDebugLog) Debug.Log (ID + ": Ban Shield Recovery.");
         }
 
         /// <summary>
@@ -261,10 +263,11 @@ namespace AFPC {
         public virtual void Respawn() {
             if (isAvailable) return;
             Activate();
-            AllowHealthRecovery();
-            AllowShieldRecovery();
+            //AllowHealthRecovery();
+            //AllowShieldRecovery();
             SetMaximumHealthAndShield();
-            CheckFrenzy ();
+            HideInstructions();
+            CheckFrenzy();
             if (isDebugLog) Debug.Log (ID + ": Respawn");
         }
 
@@ -278,6 +281,7 @@ namespace AFPC {
 		    BanHealthRecovery();
             BanShieldRecovery();
 		    SetMinimumHealthAndShield();
+            ShowRespawnInstructions();
             deathAction?.Invoke();
             if (isDebugLog) Debug.Log (ID + ": Death");
         }
@@ -288,6 +292,17 @@ namespace AFPC {
         /// <param name="action"></param>
         public void AssignDeathAction (UnityAction action) {
             deathAction = action;
+        }
+
+
+        void ShowRespawnInstructions()
+        {
+            Instructions.text = "Press T to Ressurect";
+        }
+
+        void HideInstructions()
+        {
+            Instructions.text = "";
         }
     }
 }

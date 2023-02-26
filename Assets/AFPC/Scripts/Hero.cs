@@ -35,10 +35,16 @@ public class Hero : MonoBehaviour {
         /* Initialize lifecycle and add Damage FX */
         lifecycle.Initialize();
         lifecycle.AssignDamageAction (DamageFX);
+        //lifecycle.SetHealthRecoveryRate(600);
+        lifecycle.BanHealthRecovery();
+        lifecycle.BanShieldRecovery();
+        lifecycle.referenceHealth = 75;
 
         /* Initialize movement and add camera shake when landing */
         movement.Initialize();
-        movement.AssignLandingAction (()=> overview.Shake(0.5f));
+        //movement.AssignLandingAction (()=> overview.Shake(0.5f));
+
+        overview.BanShaking();
     }
 
     private void Update () {
@@ -90,20 +96,20 @@ public class Hero : MonoBehaviour {
     }
 
     private void ReadInput () {
-        if (Input.GetKeyDown (KeyCode.R)) lifecycle.Damage(50);
-        if (Input.GetKeyDown (KeyCode.H)) lifecycle.Heal(50);
+        //if (Input.GetKeyDown (KeyCode.R)) lifecycle.Damage(50);
+        //if (Input.GetKeyDown (KeyCode.H)) lifecycle.Heal(50);
         if (Input.GetKeyDown (KeyCode.T)) lifecycle.Respawn();
         overview.lookingInputValues.x = Input.GetAxis("Mouse X");
         overview.lookingInputValues.y = Input.GetAxis("Mouse Y");
         overview.aimingInputValue = Input.GetMouseButton(1);
         movement.movementInputValues.x = Input.GetAxis("Horizontal");
         movement.movementInputValues.y = Input.GetAxis("Vertical");
-        movement.jumpingInputValue = Input.GetButtonDown("Jump");
+        //movement.jumpingInputValue = Input.GetButtonDown("Jump");
         movement.runningInputValue = Input.GetKey(KeyCode.LeftShift);
     }
 
     private void DamageFX () {
         if (HUD) HUD.DamageFX();
-        overview.Shake(0.75f);
+        //overview.Shake(0.75f);
     }
 }
