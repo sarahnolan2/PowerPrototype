@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShootController : MonoBehaviour
 {
     public GameObject shootParticle;
+    public Material targetHitMaterial;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,17 +47,17 @@ public class ShootController : MonoBehaviour
 
                 //separate idea: if we want to know what we clicked
                 // if the mouse clicks on an object with this tag:
-                /*
-                if (rayHitInfo.collider.gameObject.CompareTag("Pickup"))
+                
+                if (rayHitInfo.collider.gameObject.CompareTag("Target"))
                 {
-                    // we destroy the cube (add a bad sound effect to show we did a bad thing)
-                    GameObject.Destroy(rayHitInfo.collider.gameObject);
-                }
-                else
-                {
-                    GameObject.Instantiate(prefab, rayHitInfo.point, Quaternion.identity);
-                }
-                */
+
+                    //GameObject.Destroy(rayHitInfo.collider.gameObject);
+
+                    rayHitInfo.collider.gameObject.GetComponent<MeshRenderer>().material = targetHitMaterial;
+
+                    Debug.Log("target hit!");
+                    //should have a boolean check then?
+                }                
 
             }
 
