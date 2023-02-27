@@ -6,6 +6,9 @@ public class DragonController : MonoBehaviour
 {
     GameObject player;
     ShootController gameController;
+    public AudioController audioController;
+    public AudioClip dragonScreamClip;
+    public AudioClip[] audioClips = new AudioClip[4];
 
     Animator animator;
     bool isDragonWalking;
@@ -18,7 +21,7 @@ public class DragonController : MonoBehaviour
         gameController = player.GetComponent<ShootController>();
         animator = this.GetComponent<Animator>();
 
-        //TODO play intimidating song? and then in phase 2 play triumphant song?
+        //play intimidating song, and then in phase 2 play triumphant song
 
         if(!gameController.isPhase1Done)
         {
@@ -130,16 +133,24 @@ public class DragonController : MonoBehaviour
     IEnumerator MakeScream()
     {
         animator.SetBool("isScreaming", true);
-        //TODO play scream sound
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
+        //play scream sound
+        audioController.newSoundtrack(dragonScreamClip);
+
+        audioController.PlaySimultaneously(audioClips[0]);
+
+        yield return new WaitForSeconds(2.0f);
         animator.SetBool("isScreaming", false);
+
+        yield return new WaitForSeconds(4.0f);
+        audioController.newSoundtrack(audioClips[1]);
     }
 
     public void SetupPhase2()
     {
         //make dragon have 1 target 
-        StartCoroutine(ShowFinalTarget());
+        //StartCoroutine(ShowFinalTarget());
 
         //make sure collider is here
         GameObject dragonCollider = this.transform.Find("Root/DragonColliderPhase2").gameObject;

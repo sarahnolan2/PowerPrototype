@@ -16,11 +16,12 @@ public class ShootController : MonoBehaviour
     public float finalPlayerHeight = 50.0f;
 
     public TextMeshProUGUI Instructions;
+    public TextMeshProUGUI Instructions2;
     public TextMeshProUGUI hitnumberUI;
 
     private Animator dragonAnimator;
     public GameObject DragonPrefab;
-    public int dragonsToSpawn = 10;
+    public int dragonsToSpawn = 9;
     int totalDragonsKilled;
 
     int numberOfTargetsHit;
@@ -30,6 +31,9 @@ public class ShootController : MonoBehaviour
     private Vector3 scaleChange;
 
     bool gameWon;
+
+    public AudioController audioController;
+    public AudioClip[] audioClips = new AudioClip[3];
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +46,8 @@ public class ShootController : MonoBehaviour
 
         //set the player growth rate
         scaleChange = new Vector3(scaleRate, scaleRate, scaleRate);
+
+        dragonsToSpawn = 14;
     }
 
     // Update is called once per frame
@@ -99,8 +105,10 @@ public class ShootController : MonoBehaviour
                         StartPhase2();
                         //setup phase 2 for the existing dragon
                         rayHitInfo.collider.transform.parent.transform.parent.transform.parent.GetComponent<DragonController>().SetupPhase2();
+                        audioController.newSoundtrack(audioClips[1]);
                     }
                 }  
+                /*
                 //if the mouse clicks on the target during phase 2
                 else if (isPhase1Done && !gameWon && rayHitInfo.collider.gameObject.CompareTag("Target"))
                 {
@@ -118,8 +126,14 @@ public class ShootController : MonoBehaviour
                     rayHitInfo.collider.gameObject.SetActive(false); //hide target
 
                     totalDragonsKilled++;
-                }
-                //also check if it collided with the dragon as a whole
+
+                    if (totalDragonsKilled >= (dragonsToSpawn + 1))
+                    {
+                        audioController.newSoundtrack(audioClips[2]);
+                        gameWon = true;
+                    }
+                }*/
+                //if the mouse clicks on the target during phase 2 (if it collided with the dragon as a whole)
                 else if (isPhase1Done && !gameWon && rayHitInfo.collider.gameObject.CompareTag("Enemy"))
                 {
                     //instantiate the hit particle
@@ -134,19 +148,19 @@ public class ShootController : MonoBehaviour
                     dragonAnimator.SetBool("isDead", true); //death animation
                     rayHitInfo.collider.gameObject.transform.parent.transform.Find("FinalTarget").gameObject.SetActive(false); //hide target
 
-                    totalDragonsKilled++;                    
+                    totalDragonsKilled++;
+
+                    if (totalDragonsKilled >= (dragonsToSpawn + 1))
+                    {
+                        audioController.newSoundtrack(audioClips[2]);
+                        gameWon = true;
+                    }
                 }
                 else
                 {
                     //standard white particle instantiated at the raycast point position
                     GameObject particle = Instantiate(shootParticle, rayHitInfo.point, Quaternion.identity);
                     Destroy(particle, 5.0f); //destroy the particle object after 5 seconds
-                }
-
-
-                if(totalDragonsKilled >= (dragonsToSpawn+1))
-                {
-                    gameWon = true;
                 }
             }
         }  
@@ -166,7 +180,7 @@ public class ShootController : MonoBehaviour
 
         if(gameWon)
         {
-            ShowReloadSceneInstructions();
+            ShowWinStateText();
         }
     }
 
@@ -181,7 +195,7 @@ public class ShootController : MonoBehaviour
 
         //spawn a bunch of dragons across the scene
         SpawnDragons(dragonsToSpawn);
-        
+
         //Debug.Log("phase 2 begins!!!");
     }
 
@@ -200,6 +214,7 @@ public class ShootController : MonoBehaviour
         //hide instructions
 
         Instructions.text = "";
+        Instructions2.text = "";
     }
 
     void hitNumberUpdate()
@@ -210,21 +225,25 @@ public class ShootController : MonoBehaviour
         }
         else if(isPhase1Done)
         {
-            hitnumberUI.text = "";
+            hitnumberUI.text = totalDragonsKilled+"/"+(dragonsToSpawn+1)+"";
+        }
+        else if(gameWon)
+        {
+            hitnumberUI.text = totalDragonsKilled + "/" + (dragonsToSpawn + 1) + " VANQUISHED";
         }
     }
 
 
-    void ShowReloadSceneInstructions()
+    void ShowWinStateText()
     {
-        //TODO REFERENCE A DIFFERENT INSTRUCTION THAT WOULD NOT BE AT THE TOP OF THE SCREEN, BUT LOWER
-        Instructions.text = "Press U to Restart the Game";
+        Instructions.text = "You defeated the horde of dragons.";
+        Instructions2.text = "Press U to Restart";
     }
 
 
     void SpawnDragons(int amount)
     {
-        //todo instantiate dragon game objects
+        //instantiate dragon game objects
 
         for(int i = 0; i < amount; i++)
         {
