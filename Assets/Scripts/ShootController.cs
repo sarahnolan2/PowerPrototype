@@ -146,7 +146,8 @@ public class ShootController : MonoBehaviour
 
                     //Debug.Log("enemy: dragon is dead");
                     dragonAnimator.SetBool("isDead", true); //death animation
-                    rayHitInfo.collider.gameObject.transform.parent.transform.Find("FinalTarget").gameObject.SetActive(false); //hide target
+                    //rayHitInfo.collider.gameObject.transform.parent.transform.Find("FinalTarget").gameObject.SetActive(false); //hide target
+                    rayHitInfo.collider.gameObject.SetActive(false);
 
                     totalDragonsKilled++;
 

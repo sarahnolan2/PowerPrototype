@@ -297,7 +297,7 @@ namespace AFPC {
 
         void ShowRespawnInstructions()
         {
-            Instructions.text = "Press T to Ressurect";
+            Instructions.text = "Press T to Resurrect";
         }
 
         void HideInstructions()
