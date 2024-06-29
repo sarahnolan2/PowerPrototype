@@ -9,3 +9,5 @@ Credits:
 - [Advanced First Person Controller](https://assetstore.unity.com/packages/templates/systems/advanced-first-person-controller-167675)
 - [Crosshair texture](https://assetstore.unity.com/packages/2d/gui/icons/os-crosshairs-free-crosshair-pack-216732)
 - Music edited together from Pixabay
+
+## Unity Version: 2021.3.16f1
